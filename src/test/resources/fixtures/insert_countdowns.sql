@@ -1,0 +1,1 @@
+INSERT INTO countdowns VALUES ('d0d0fa98-151f-4de6-b971-8c65de2d12f0', 'test', current_timestamp)
