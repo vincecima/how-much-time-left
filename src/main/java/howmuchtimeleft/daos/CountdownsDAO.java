@@ -2,6 +2,7 @@ package howmuchtimeleft.daos;
 
 import howmuchtimeleft.models.Countdown;
 import jodd.db.DbQuery;
+import jodd.db.oom.DbOomQuery;
 import org.joda.time.DateTime;
 
 import java.sql.Connection;
@@ -17,5 +18,12 @@ public class CountdownsDAO {
         return query.find(resultSet -> {
             return new Countdown((UUID) resultSet.getObject("id"), resultSet.getString("name"), new DateTime(resultSet.getTimestamp("targetDateTime").getTime()));
         });
+    }
+
+    public Countdown create(Connection conn, Countdown countdown) {
+        DbOomQuery query = new DbOomQuery(conn, CREATE_SQL);
+        query.setBean("cd", countdown);
+        UUID generatedId = query.find(resultSet -> (UUID) resultSet.getObject("id"));
+        return new Countdown(generatedId, countdown.getName(), countdown.getTargetDateTime());
     }
 }
