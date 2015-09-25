@@ -3,12 +3,12 @@ package howmuchtimeleft.daos;
 import howmuchtimeleft.TestHelpers;
 import howmuchtimeleft.models.Countdown;
 import org.joda.time.DateTime;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.sql.Connection;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class CountdownsDAOTest {
     @Test

@@ -1,11 +1,16 @@
 package howmuchtimeleft;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.zaxxer.hikari.HikariDataSource;
+import howmuchtimeleft.models.Countdown;
+import howmuchtimeleft.utils.DateTimeDeserializer;
 import jodd.io.StreamUtil;
 import jodd.util.ClassLoaderUtil;
 import org.flywaydb.core.Flyway;
+import org.joda.time.DateTime;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -17,6 +22,7 @@ import java.sql.Statement;
 public class TestHelpers {
     private static final Config config = ConfigFactory.load();
     private static DataSource dataSource = null;
+    private static Gson gson = null;
 
     public static DataSource getDataSource() {
         if(dataSource == null) {
@@ -32,13 +38,23 @@ public class TestHelpers {
         return dataSource;
     }
 
+    public static Gson getGson() {
+        if(gson == null) {
+            gson = new GsonBuilder().
+                registerTypeAdapter(Countdown.class, new CountdownDeserializer()).
+                registerTypeAdapter(DateTime.class, new DateTimeDeserializer()).
+                create();
+        }
+        return gson;
+    }
+
     public static void loadSQLFixture(Connection conn, String name) throws IOException, SQLException {
         InputStream is = ClassLoaderUtil.getResourceAsStream("/fixtures/insert_countdowns.sql");
         String fixture = new String(StreamUtil.readAvailableBytes(is));
         String[] sqlStatements = fixture.split(";");
         Statement fixtureStatement = conn.createStatement();
-        for(String singleSQLStatment : sqlStatements) {
-            fixtureStatement.addBatch(singleSQLStatment);
+        for(String singleSQLStatement : sqlStatements) {
+            fixtureStatement.addBatch(singleSQLStatement);
         }
         fixtureStatement.executeBatch();
     }

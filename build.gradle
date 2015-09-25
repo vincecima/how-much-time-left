@@ -25,11 +25,15 @@ dependencies {
     compile 'org.flywaydb:flyway-core:3.2.1'
     compile 'org.jodd:jodd-db:3.6.6'
 
-    testCompile 'junit:junit:4.12'
+    testCompile 'org.testng:testng:6.9.6'
+    testCompile 'com.squareup.okhttp:okhttp:2.5.0'
 }
 
 mainClassName = "howmuchtimeleft.Application"
 
 test {
     systemProperty 'config.file', 'application.test.json'
+    useTestNG() {
+        listeners << 'howmuchtimeleft.TestSparkApplicationManager'
+    }
 }

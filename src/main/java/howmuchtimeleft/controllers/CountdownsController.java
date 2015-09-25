@@ -36,7 +36,7 @@ public class CountdownsController {
         List<Violation> errors = validator.validate(countdown);
         if(errors == null) {
             try(Connection conn = this.dataSource.getConnection()) {
-                new CountdownsDAO().create(conn, countdown);
+                countdown = new CountdownsDAO().create(conn, countdown);
             }
             response.status(201);
             response.type("application/json");
