@@ -6,13 +6,18 @@ TODO: Write a project description
 
 TODO: Describe the installation process
 
-## Usage
+To produce a single executable jar:
+`gradle shadowJar`
+
+To execute the jar:
+`java -jar build/libs/how-much-time-left-all.jar`
 
 TODO: Write usage instructions
 
 ## Roadmap
 
 - [ ] Serialize request validation errors
+- [ ] DEBUG logging in development, INFO everywhere else
 
 ## Contributing
 
@@ -28,7 +33,7 @@ TODO: Write history
 
 ## Credits
 
-TODO: Write credits
+TODO: Write credit
 
 ## License
 
