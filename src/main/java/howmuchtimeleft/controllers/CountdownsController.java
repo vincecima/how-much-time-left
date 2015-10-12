@@ -10,7 +10,9 @@ import spark.Response;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 public class CountdownsController {
     private DataSource dataSource = null;
@@ -26,11 +28,24 @@ public class CountdownsController {
         spark.Spark.post("/countdowns", this::create);
     }
 
-    private String get(Request request, Response response) {
-        return "Hello World";
+    private String get(Request request, Response response) throws SQLException {
+        Countdown countdown = null;
+        try(Connection conn = this.dataSource.getConnection()) {
+            countdown = new CountdownsDAO().find(conn, UUID.fromString(request.params("id")));
+        }
+        if(countdown != null) {
+            response.status(200);
+            response.type("application/json");
+            return this.gson.toJson(countdown);
+        }
+        else {
+            response.status(404);
+            return "";
+        }
+
     }
 
-    private String create(Request request, Response response) throws Exception {
+    private String create(Request request, Response response) throws SQLException {
         Countdown countdown = gson.fromJson(request.body(), Countdown.class);
         CountdownValidator validator = new CountdownValidator();
         List<Violation> errors = validator.validate(countdown);

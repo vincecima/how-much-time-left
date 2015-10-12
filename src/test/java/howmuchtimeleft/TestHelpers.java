@@ -2,6 +2,7 @@ package howmuchtimeleft;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.okhttp.OkHttpClient;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.zaxxer.hikari.HikariDataSource;
@@ -23,6 +24,7 @@ public class TestHelpers {
     private static final Config config = ConfigFactory.load();
     private static DataSource dataSource = null;
     private static Gson gson = null;
+    private static OkHttpClient httpClient = null;
 
     public static DataSource getDataSource() {
         if(dataSource == null) {
@@ -46,6 +48,13 @@ public class TestHelpers {
                 create();
         }
         return gson;
+    }
+
+    public static OkHttpClient getHttpClient() {
+        if(httpClient == null) {
+            httpClient = new OkHttpClient();
+        }
+        return httpClient;
     }
 
     public static void loadSQLFixture(Connection conn, String name) throws IOException, SQLException {
