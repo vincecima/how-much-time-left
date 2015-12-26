@@ -13,7 +13,6 @@ public class ErrorHandler {
         spark.Spark.exception(Exception.class, (e, request, response) -> {
             if(e instanceof ValidationException) {
                 response.status(422);
-                response.type("application/json");
                 response.body(this.gson.toJson(new ErrorResponse((ValidationException) e)));
             }
             else {

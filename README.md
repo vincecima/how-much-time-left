@@ -21,6 +21,7 @@ TODO: Write usage instructions
   - [x] Use Exception Mapper to convert violations into response
   - [ ] Extend VTor to include human readable failure message
 - [ ] DEBUG logging in development, INFO everywhere else
+- [ ] Figure out why JSONResponseTypeFilter works only as a before filter
 
 ## Contributing
 
