@@ -2,9 +2,6 @@ package howmuchtimeleft.utils;
 
 import com.google.gson.Gson;
 
-/**
- * Created by vincecima on 12/26/15.
- */
 public class ErrorHandler {
     private Gson gson = null;
 
