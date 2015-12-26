@@ -27,6 +27,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'org.jodd:jodd-core:3.6.6'
     compile 'org.jodd:jodd-vtor:3.6.6'
+    compile 'com.google.guava:guava:19.0'
 
     compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
     compile 'com.zaxxer:HikariCP:2.3.9'

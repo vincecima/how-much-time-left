@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import howmuchtimeleft.daos.CountdownsDAO;
 import howmuchtimeleft.models.Countdown;
 import howmuchtimeleft.models.CountdownValidator;
+import howmuchtimeleft.utils.ValidationException;
 import jodd.vtor.Violation;
 import spark.Request;
 import spark.Response;
@@ -45,21 +46,15 @@ public class CountdownsController {
 
     }
 
-    private String create(Request request, Response response) throws SQLException {
+    private String create(Request request, Response response) throws SQLException, ValidationException {
         Countdown countdown = gson.fromJson(request.body(), Countdown.class);
         CountdownValidator validator = new CountdownValidator();
-        List<Violation> errors = validator.validate(countdown);
-        if(errors == null) {
-            try(Connection conn = this.dataSource.getConnection()) {
-                countdown = new CountdownsDAO().create(conn, countdown);
-            }
-            response.status(201);
-            response.type("application/json");
-            return this.gson.toJson(countdown);
+        validator.validate(countdown);
+        try(Connection conn = this.dataSource.getConnection()) {
+            countdown = new CountdownsDAO().create(conn, countdown);
         }
-        else {
-            response.status(422);
-            return "";
-        }
+        response.status(201);
+        response.type("application/json");
+        return this.gson.toJson(countdown);
     }
 }

@@ -6,8 +6,7 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.zaxxer.hikari.HikariDataSource;
 import howmuchtimeleft.controllers.CountdownsController;
-import howmuchtimeleft.utils.DateTimeDeserializer;
-import howmuchtimeleft.utils.DateTimeSerializer;
+import howmuchtimeleft.utils.*;
 import org.flywaydb.core.Flyway;
 import org.joda.time.DateTime;
 
@@ -28,6 +27,7 @@ public class Application {
         this.createDataSource();
         this.runMigrations();
         this.createGson();
+        this.setupExceptionHandling();
     }
 
     public void start() {
@@ -57,5 +57,9 @@ public class Application {
                 registerTypeAdapter(DateTime.class, new DateTimeSerializer()).
                 create();
         }
+    }
+
+    private void setupExceptionHandling() {
+        new ErrorHandler(this.gson).use();
     }
 }
