@@ -36,7 +36,6 @@ public class CountdownsController {
         }
         if(countdown != null) {
             response.status(200);
-            response.type("application/json");
             return this.gson.toJson(countdown);
         }
         else {
@@ -54,7 +53,6 @@ public class CountdownsController {
             countdown = new CountdownsDAO().create(conn, countdown);
         }
         response.status(201);
-        response.type("application/json");
         return this.gson.toJson(countdown);
     }
 }
