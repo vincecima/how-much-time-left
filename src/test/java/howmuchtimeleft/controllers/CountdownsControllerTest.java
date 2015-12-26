@@ -7,10 +7,12 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import howmuchtimeleft.TestHelpers;
 import howmuchtimeleft.models.Countdown;
+import howmuchtimeleft.utils.ErrorResponse;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -52,5 +54,23 @@ public class CountdownsControllerTest {
         Countdown countdown = TestHelpers.getGson().fromJson(response.body().string(), Countdown.class);
         assertEquals("TestCountdown", countdown.getName());
         assertNotNull(countdown.getId());
+    }
+
+    @Test
+    public void testInvalidCreate() throws IOException {
+        String requestJSON = TestHelpers.getGson().toJson(
+                ImmutableMap.<String, Object>of(
+                        "name", "A",
+                        "targetDateTime", "2015-09-23T20:10:12+00:00"
+                )
+        );
+        RequestBody body = RequestBody.create(JSON, requestJSON);
+        Request request = new Request.Builder().url("http://localhost:4567/countdowns").post(body).build();
+        Response response = TestHelpers.getHttpClient().newCall(request).execute();
+        assertEquals(422, response.code());
+        ErrorResponse errorResponse = TestHelpers.getGson().fromJson(response.body().string(), ErrorResponse.class);
+        assertEquals(errorResponse.getErrors().size(), 1);
+        assertEquals("name", errorResponse.getErrors().get(0).getField());
+        assertEquals("A", errorResponse.getErrors().get(0).getBadValue());
     }
 }
