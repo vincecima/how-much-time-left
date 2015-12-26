@@ -17,6 +17,9 @@ TODO: Write usage instructions
 ## Roadmap
 
 - [ ] Serialize request validation errors
+  - [x] Throw violations from failed validator
+  - [x] Use Exception Mapper to convert violations into response
+  - [ ] Extend VTor to include human readable failure message
 - [ ] DEBUG logging in development, INFO everywhere else
 
 ## Contributing
